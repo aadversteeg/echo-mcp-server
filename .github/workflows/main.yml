@@ -85,10 +85,10 @@ jobs:
       
       # Generate SLSA provenance for the release artifacts
       - name: Generate SLSA provenance
-        uses: slsa-framework/slsa-github-generator@v1
+        uses: slsa-framework/slsa-github-generator@v2.0.0
         with:
-          base64-subjects: ${{ github.sha }}
-          upload-assets: true
+          artifact-path: echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-bin.zip
+          provenance-name: echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-bin.zip.intoto.jsonl
   
       # Create GitHub release with the zipped artifacts
       - name: Create GitHub Release
