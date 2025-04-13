@@ -25,8 +25,8 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 # Create a tag with the version
-Write-Host "Creating tag v$Version..."
-git tag -a "v$Version" -m "Version $Version"
+Write-Host "Creating tag $Version..."
+git tag -a "$Version" -m "Version $Version"
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Failed to create tag. Aborting."
     exit 1
@@ -34,7 +34,7 @@ if ($LASTEXITCODE -ne 0) {
 
 # Push the tag to remote
 Write-Host "Pushing tag to remote..."
-git push origin "v$Version"
+git push origin "$Version"
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Failed to push tag to remote. Aborting."
     exit 1
