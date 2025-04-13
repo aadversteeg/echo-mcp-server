@@ -83,12 +83,18 @@ jobs:
             aadversteeg/echo-mcp-server:${{ steps.get_version.outputs.VERSION }}
             aadversteeg/echo-mcp-server:latest
       
-      # Generate SLSA provenance for the release artifacts
+      # Generate provenance for the bin archive
+      - name: Generate hashes for SLSA provenance
+        id: hash
+        run: |
+          echo "HASHES=$(sha256sum echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-bin.zip | base64 -w0)" >> $GITHUB_OUTPUT
+      
+      # Generate SLSA provenance using the reusable workflow - corrected reference
       - name: Generate SLSA provenance
-        uses: slsa-framework/slsa-github-generator@v2.0.0
+        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.0.0
         with:
-          artifact-path: echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-bin.zip
-          provenance-name: echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-bin.zip.intoto.jsonl
+          base64-subjects: ${{ steps.hash.outputs.HASHES }}
+          upload-assets: true # This will upload to the GitHub release
   
       # Create GitHub release with the zipped artifacts
       - name: Create GitHub Release
