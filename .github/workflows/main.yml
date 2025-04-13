@@ -1,4 +1,4 @@
-name: Publish Chronos Mcp Server to Dockerhub
+name: Publish Echo Mcp Server to Dockerhub
 
 on:
   push:
@@ -53,5 +53,5 @@ jobs:
           build-args: |
             BUILD_CONFIGURATION=Release
           tags: |
-            aadversteeg/chronos-mcp-server:${{ steps.get_version.outputs.VERSION }}
-            aadversteeg/chronos-mcp-server:latest
+            aadversteeg/echo-mcp-server:${{ steps.get_version.outputs.VERSION }}
+            aadversteeg/echo-mcp-server:latest

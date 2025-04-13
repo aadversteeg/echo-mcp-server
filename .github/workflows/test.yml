@@ -3,6 +3,7 @@ name: Run Tests and Build Docker Image
 on:
   pull_request:
     branches: [ "main" ]
+    
   workflow_dispatch:
 
 jobs:
@@ -17,13 +18,13 @@ jobs:
         dotnet-version: '9.0.x'
     
     - name: Restore dependencies
-      run: dotnet restore src/chronos.sln
+      run: dotnet restore src/echo.sln
     
     - name: Build
-      run: dotnet build src/chronos.sln --no-restore
+      run: dotnet build src/echo.sln --no-restore
     
     - name: Test
-      run: dotnet test src/chronos.sln --no-build --verbosity normal
+      run: dotnet test src/echo.sln --no-build --verbosity normal
   
   docker-build:
     runs-on: ubuntu-latest
@@ -40,14 +41,14 @@ jobs:
         # Build the image but don't push it
         docker build -f Core.Infrastructure.McpServer/Dockerfile \
           --build-arg BUILD_CONFIGURATION=Release \
-          -t chronos-mcp-server:test \
+          -t echo-mcp-server:test \
           .
     
     - name: Test Docker image
       run: |
         # Run the container and capture logs - we expect it to exit since MCP servers exit without input
         echo "Running container..."
-        container_id=$(docker run --name test-container -d chronos-mcp-server:test)
+        container_id=$(docker run --name test-container -d echo-mcp-server:test)
         
         # Wait a few seconds for logs to be generated
         sleep 3
@@ -57,7 +58,7 @@ jobs:
         docker logs test-container
         
         # Check logs for expected startup messages
-        if docker logs test-container 2>&1 | grep -q "Starting MCP Chronos Server" && \
+        if docker logs test-container 2>&1 | grep -q "Starting MCP Echo Server" && \
            docker logs test-container 2>&1 | grep -q "Transport entering read messages loop" && \
            docker logs test-container 2>&1 | grep -q "Application started"; then
           echo "✅ Container started successfully with expected log messages"
