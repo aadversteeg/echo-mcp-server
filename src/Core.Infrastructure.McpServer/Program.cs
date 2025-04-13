@@ -23,7 +23,7 @@ namespace Core.Infrastructure.McpServer
         
         static async Task Main(string[] args)
         {
-            Console.Error.WriteLine("Starting MCP Chronos Server...");
+            Console.Error.WriteLine("Starting MCP Echo Server...");
             var builder = Host.CreateApplicationBuilder(args);
 
             // Add appsettings.json configuration, use full path in case working folder is different
