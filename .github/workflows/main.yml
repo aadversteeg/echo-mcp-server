@@ -52,13 +52,16 @@ jobs:
         
       - name: Create binary zip
         run: |
-          zip -r echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-bin.zip ./bin-output
+          cd ./bin-output
+          zip -r ../echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-bin.zip .
+          cd ..
       
       - name: Create source zip
         run: |
           # Exclude .git, .github, and other non-source directories
           zip -r echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-src.zip . \
-            -x "*/bin/*" -x "*/obj/*" -x ".git*" -x ".github/*" -x "bin-output/*"
+            -x "*/bin/*" -x "*/obj/*" -x ".git*" -x ".github/*" -x "bin-output/*" \
+            -x "*.zip" -x "echo-mcp-server-*.zip"
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
