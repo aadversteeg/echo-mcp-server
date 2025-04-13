@@ -154,7 +154,44 @@ To use the Echo server from a Docker container with Claude Desktop:
 }
 ```
 
-2. Save the file and restart Claude Desktop
+#### Using Docker with Custom Configuration File
+
+To use a custom configuration file from your host system:
+
+1. Create a custom configuration file on your host machine (e.g., `echo-appsettings.json`):
+```json
+{
+  "MessageFormat": "My Custom Format: {message}",
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning"
+    }
+  }
+}
+```
+
+2. Update the Claude Desktop configuration to mount this file:
+```json
+"echo": {
+  "command": "docker",
+  "args": [
+    "run",
+    "--rm",
+    "-i",
+    "-v", "C:/path/to/echo-appsettings.json:/app/appsettings.json",
+    "echo-mcp-server:latest"
+  ]
+}
+```
+
+**Important Notes:**
+- The configuration file must exist on your host system before starting the container
+- You can use any filename on the host (e.g., `echo-appsettings.json`), but it must be mounted to `/app/appsettings.json` inside the container
+- Make sure the path is correct for your operating system (Windows uses backslashes or forward slashes, Linux/macOS use forward slashes)
+- After changing the configuration file, restart Claude Desktop to apply the changes
+
+3. Save the file and restart Claude Desktop
 
 ## License
 
