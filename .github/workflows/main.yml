@@ -11,7 +11,9 @@ jobs:
     permissions:
       contents: write
       packages: write
-      id-token: write # Needed for SLSA provenance
+    outputs:
+      version: ${{ steps.get_version.outputs.VERSION }}
+      hashes: ${{ steps.hash.outputs.HASHES }}
     
     steps:
       - name: Checkout repository
@@ -83,18 +85,11 @@ jobs:
             aadversteeg/echo-mcp-server:${{ steps.get_version.outputs.VERSION }}
             aadversteeg/echo-mcp-server:latest
       
-      # Generate provenance for the bin archive
+      # Generate hashes for SLSA provenance
       - name: Generate hashes for SLSA provenance
         id: hash
         run: |
           echo "HASHES=$(sha256sum echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-bin.zip | base64 -w0)" >> $GITHUB_OUTPUT
-      
-      # Generate SLSA provenance using the reusable workflow - corrected reference
-      - name: Generate SLSA provenance
-        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.0.0
-        with:
-          base64-subjects: ${{ steps.hash.outputs.HASHES }}
-          upload-assets: true # This will upload to the GitHub release
   
       # Create GitHub release with the zipped artifacts
       - name: Create GitHub Release
@@ -106,3 +101,16 @@ jobs:
             echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-bin.zip
             echo-mcp-server-${{ steps.get_version.outputs.VERSION }}-src.zip
           generate_release_notes: true
+
+  # SLSA provenance generation as a separate job
+  provenance:
+    needs: [build-and-release]
+    permissions:
+      actions: read   # To read the workflow path
+      id-token: write # To sign the provenance
+      contents: write # To add assets to a release
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.0.0
+    with:
+      base64-subjects: ${{ needs.build-and-release.outputs.hashes }}
+      upload-assets: true
+      upload-tag-name: ${{ needs.build-and-release.outputs.version }}
