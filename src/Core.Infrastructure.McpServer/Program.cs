@@ -52,7 +52,7 @@ namespace Core.Infrastructure.McpServer
             // Get MessageFormat from config 
             string messageFormat = builder.Configuration.GetValue<string>("MessageFormat") ?? "Echo: {message}";
 
-            // Register ChronosToolSettings with DI
+            // Register EchoToolsSettings with DI
             builder.Services.AddSingleton(
                 new EchoToolsSettings()
                 {
