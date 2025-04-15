@@ -154,6 +154,16 @@ To use the Echo server from a Docker container with Claude Desktop:
 }
 ```
 
+## Configuring Claude Code
+
+To add the echo server to Claude Code, use the following command:
+
+```bash
+claude mcp add echo -- docker run -i --rm -e MessageFormat="Claude says: {message}" aadversteeg/echo-mcp-server:latest
+```
+
+You can customize the message format by modifying the MessageFormat environment variable.
+
 #### Using Docker with Custom Configuration File
 
 To use a custom configuration file from your host system:
@@ -192,6 +202,26 @@ To use a custom configuration file from your host system:
 - After changing the configuration file, restart Claude Desktop to apply the changes
 
 3. Save the file and restart Claude Desktop
+
+## Configuring Claude Code
+
+To add the echo server to Claude Code, use the following command:
+
+```bash
+claude mcp add echo -- docker run -i --rm -e MessageFormat="Claude says: {message}" aadversteeg/echo-mcp-server:latest
+```
+
+You can customize the message format by modifying the MessageFormat environment variable.
+
+## Configuring Claude Code
+
+To add the echo server to Claude Code, use the following command:
+
+```bash
+claude mcp add echo -- docker run -i --rm -e MessageFormat="Claude says: {message}" aadversteeg/echo-mcp-server:latest
+```
+
+You can customize the message format by modifying the MessageFormat environment variable.
 
 ## License
 
