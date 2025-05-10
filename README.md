@@ -190,7 +190,7 @@ To use a custom configuration file from your host system:
     "--rm",
     "-i",
     "-v", "C:/path/to/echo-appsettings.json:/app/appsettings.json",
-    "echo-mcp-server:latest"
+    "aadversteeg/echo-mcp-server:latest"
   ]
 }
 ```
