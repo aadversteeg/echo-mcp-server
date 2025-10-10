@@ -9,11 +9,11 @@ namespace UnitTests.Infrastructure.McpServer.Tools
     public class EchoToolsTests
     {
         [Fact(DisplayName = "ET-001: Echo should return the formatted message.")]
-        public void ET001()
+        public async Task ET001()
         {
             // Arrange
             var loggerMock = new Mock<ILogger<EchoTools>>(); // Mock the logger
-            var fixture = new Fixture();    
+            var fixture = new Fixture();
             var message = fixture.Create<string>();
             var toolsSettings = new EchoToolsSettings
             {
@@ -22,7 +22,7 @@ namespace UnitTests.Infrastructure.McpServer.Tools
             var tools = new EchoTools(loggerMock.Object, toolsSettings);
 
             // Act
-            var result = tools.Echo(message);
+            var result = await tools.Echo(message);
 
             // Assert
             result.Should().Be($"Test-Echo: {message}");
