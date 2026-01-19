@@ -16,7 +16,7 @@ The Echo MCP server is built with .NET Core using the Model Context Protocol C# 
 
 ### Prerequisites
 
-- .NET 9.0 (for local development/deployment)
+- .NET 10.0 (for local development/deployment)
 - Docker (for container deployment)
 
 ### Build Instructions (for development)
