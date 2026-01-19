@@ -22,7 +22,7 @@ namespace UnitTests.Infrastructure.McpServer.Tools
             var tools = new EchoTools(loggerMock.Object, toolsSettings);
 
             // Act
-            var result = await tools.Echo(message);
+            var result = await tools.Echo(message, TestContext.Current.CancellationToken);
 
             // Assert
             result.Should().Be($"Test-Echo: {message}");
