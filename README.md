@@ -43,6 +43,32 @@ If you want to build the project from source:
    dotnet test src/echo.sln
    ```
 
+## .NET Tool
+
+The Echo MCP Server is available as a .NET global tool on NuGet.
+
+### Installation
+
+```bash
+dotnet tool install --global Ave.McpServer.Echo
+```
+
+### Running
+
+```bash
+ave-mcpserver-echo
+```
+
+### One-shot execution (without permanent installation)
+
+With .NET 10 SDK, you can run the tool without installing it globally using `dotnet tool exec`:
+
+```bash
+dotnet tool exec -y ave.mcpserver.echo
+```
+
+The `-y` flag accepts prompts automatically. The tool is cached locally but not added to your PATH.
+
 ## Docker Support
 
 ### Manual Docker Build
@@ -115,18 +141,22 @@ When using MCP server with Claude, environment variables are passed through the 
 
 If not specified, the server defaults to "Echo: {message}".
 
-## Configuring Claude Desktop
+## Configuring Claude Desktop / Claude Code
 
-### Using Local Installation
+Add the server configuration to the `mcpServers` section in your configuration file.
 
-To configure Claude Desktop to use a locally installed Echo server:
+### Using .NET Tool
 
-1. Add the server configuration to the `mcpServers` section in your Claude Desktop configuration:
+Requires .NET 10 SDK. This approach automatically downloads the tool on first use and updates to the latest version on subsequent runs.
+
 ```json
 "echo": {
   "command": "dotnet",
   "args": [
-    "YOUR_PATH_TO_DLL\\Core.Infrastructure.McpServer.dll"
+    "tool",
+    "exec",
+    "-y",
+    "ave.mcpserver.echo"
   ],
   "env": {
     "MessageFormat": "Claude says: {message}"
@@ -134,13 +164,29 @@ To configure Claude Desktop to use a locally installed Echo server:
 }
 ```
 
-2. Save the file and restart Claude Desktop
+### Using Global Installation
 
-### Using Docker Container
+Requires .NET 10 SDK. Install the tool once, then use it directly.
 
-To use the Echo server from a Docker container with Claude Desktop:
+```bash
+dotnet tool install --global Ave.McpServer.Echo
+```
 
-1. Add the server configuration to the `mcpServers` section in your Claude Desktop configuration:
+```json
+"echo": {
+  "command": "ave-mcpserver-echo",
+  "env": {
+    "MessageFormat": "Claude says: {message}"
+  }
+}
+```
+
+To update: `dotnet tool update --global Ave.McpServer.Echo`
+
+### Using Docker
+
+Does not require .NET 10 SDK.
+
 ```json
 "echo": {
   "command": "docker",
@@ -149,20 +195,10 @@ To use the Echo server from a Docker container with Claude Desktop:
     "--rm",
     "-i",
     "-e", "MessageFormat=Claude says: {message}",
-    "echo-mcp-server:latest"
+    "aadversteeg/echo-mcp-server:latest"
   ]
 }
 ```
-
-## Configuring Claude Code
-
-To add the echo server to Claude Code, use the following command:
-
-```bash
-claude mcp add echo -- docker run -i --rm -e MessageFormat="Claude says: {message}" aadversteeg/echo-mcp-server:latest
-```
-
-You can customize the message format by modifying the MessageFormat environment variable.
 
 #### Using Docker with Custom Configuration File
 
@@ -181,7 +217,7 @@ To use a custom configuration file from your host system:
 }
 ```
 
-2. Update the Claude Desktop configuration to mount this file:
+2. Update the configuration to mount this file:
 ```json
 "echo": {
   "command": "docker",
@@ -200,28 +236,6 @@ To use a custom configuration file from your host system:
 - You can use any filename on the host (e.g., `echo-appsettings.json`), but it must be mounted to `/app/appsettings.json` inside the container
 - Make sure the path is correct for your operating system (Windows uses backslashes or forward slashes, Linux/macOS use forward slashes)
 - After changing the configuration file, restart Claude Desktop to apply the changes
-
-3. Save the file and restart Claude Desktop
-
-## Configuring Claude Code
-
-To add the echo server to Claude Code, use the following command:
-
-```bash
-claude mcp add echo -- docker run -i --rm -e MessageFormat="Claude says: {message}" aadversteeg/echo-mcp-server:latest
-```
-
-You can customize the message format by modifying the MessageFormat environment variable.
-
-## Configuring Claude Code
-
-To add the echo server to Claude Code, use the following command:
-
-```bash
-claude mcp add echo -- docker run -i --rm -e MessageFormat="Claude says: {message}" aadversteeg/echo-mcp-server:latest
-```
-
-You can customize the message format by modifying the MessageFormat environment variable.
 
 ## License
 
