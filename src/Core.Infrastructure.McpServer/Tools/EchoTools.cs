@@ -17,8 +17,9 @@ namespace Core.Infrastructure.McpServer.Tools
             _messageFormat = settings.MessageFormat;
         }
 
-        [McpServerTool(Name = "echo", ReadOnly = true, OpenWorld = false), Description("Echoes the message back to the client.")]
-        public async Task<string> Echo(string message, CancellationToken cancellationToken = default)
+        [McpServerTool(Name = "echo", Title = "Echo", ReadOnly = true, OpenWorld = false), Description("Echoes the message back to the client.")]
+        [McpMeta("author", "aadversteeg")]
+        public async Task<string> Echo([Description("The message to echo back")] string message, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Echoing message: {message}", message);
 
